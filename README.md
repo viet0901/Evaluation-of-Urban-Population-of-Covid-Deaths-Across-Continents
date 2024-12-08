@@ -1,105 +1,97 @@
-# CS-181 Final Project: Evaluation of Urban Population Percentage on COVID-19 Deaths Across Continents
+# Final Project: Evaluation of Urban Population Percentage on COVID-19 Deaths Across Continents
 
-**Authors**: Viet Nguyen, Minh Nguyen, Long Kim  
+**Authors**: Minh Nguyen, Long Kim, Viet Nguyen  
 **Date**: April 20, 2024
 
 ---
 
-## **Project Overview**
-
-This project investigates the impact of urbanization on the COVID-19 pandemic's health outcomes. Specifically, we aim to understand how urban population percentages correlate with COVID-19 death rates across various continents. By analyzing data from trusted sources like the OWID COVID-19 dataset, we examine trends and patterns in the 2022 calendar year. This project focuses on data cleaning, database creation, and preliminary data visualization.
+## **Project Overview**  
+This project investigates the relationship between urban population percentages and COVID-19 deaths across different continents. Specifically, it aims to understand whether higher urbanization contributes to increased COVID-19 mortality rates and how access to healthcare in urban areas affects pandemic outcomes. The study also explores whether proximity to the origin of COVID-19 (China) impacts the number of COVID-19 cases in a country. The project combines data from three key sources to examine the spread and fatality of the virus in urban settings across the globe.
 
 ---
 
-## **Datasets Used**
+## **Research Question**  
+How does the percentage of urban population correlate with COVID-19 deaths across different continents? Does urbanization affect the spread of the virus and its fatality rate, and does proximity to China influence these outcomes?
 
-1. **owid-covid-data.json**  
-   Contains detailed COVID-19 statistics by country and date. The data is loaded, cleaned, and transformed into a structured pandas DataFrame.
+---
 
-2. **API_SP.URB.TOTL.IN.ZS_DS2_en_csv_v2_43721.csv**  
-   Provides urban population data, which is processed and merged with the COVID-19 data for insightful analysis.
+## **Datasets**
 
-3. **world_population.csv**  
-   Includes global population figures, merged to provide demographic context for the analysis.
+1. **COVID-19 Data (Our World in Data)**  
+   - Link: [COVID-19 Dataset](https://ourworldindata.org/covid-cases)  
+   - This dataset provides comprehensive COVID-19 statistics including total cases and deaths by country and date. It is used to analyze the impact of the pandemic on different countries.
+
+2. **Urban Population Data (World Bank)**  
+   - Link: [Urban Population Dataset](https://data.worldbank.org/indicator/SP.URB.TOTL)  
+   - This dataset provides urban population metrics, which are used to assess the level of urbanization in each country.
+
+3. **World Population Data (Kaggle)**  
+   - Link: [World Population Dataset](https://www.kaggle.com/datasets/iamsouravbanerjee/world-population-dataset)  
+   - This dataset offers detailed population data by country, useful for calculating urban population percentages and demographic context.
+
+---
+
+## **Methodology**  
+
+To explore the relationship between COVID-19 deaths and urban population percentage, we will utilize the pandas and matplotlib libraries in Python for data manipulation and visualization. The process involves the following steps:
+
+1. **Reading and Cleaning the Data**:  
+   We will load the datasets and clean them to ensure consistency. Missing values will be handled, duplicates will be removed, and the data will be transformed for analysis.
+
+2. **Merging Datasets**:  
+   The three datasets will be merged based on the common attribute: country name. This will allow for an integrated analysis of COVID-19 deaths, urban population, and overall population data.
+
+3. **Group by Continent**:  
+   The dataset will be grouped by continent to explore regional differences in COVID-19 deaths and urbanization.
+
+4. **Exploratory Data Analysis (EDA)**:  
+   We will explore the correlation between urban population percentages and COVID-19 deaths, identifying trends and patterns.
+
+5. **Visualization**:  
+   Scatter plots will be created to visualize the relationship between urbanization and COVID-19 mortality rates across continents.
 
 ---
 
 ## **Functions Overview**
 
-1. **read_json(infilename)**  
-   Reads the OWID COVID-19 dataset into a pandas DataFrame for further processing.
+Here is a list of functions we will use in our analysis:
 
-2. **clean_urban_df(input_file)**  
-   Cleans and standardizes the urban population data, preparing it for merging with the COVID-19 data.
-
-3. **clean_population_df(input_file)**  
-   Processes the world population data, aligning it with the necessary structure for database integration.
-
-4. **clean_death_df(input_file)**  
-   Aggregates the COVID-19 data on a yearly basis and reformats it for consistent database insertion.
-
-5. **urban_create(dataframe, dbfilename)**  
-   Creates and populates an SQLite database table with the cleaned urban population data.
-
-6. **population_create(dataframe, dbfilename)**  
-   Establishes a table in the SQLite database for global population statistics.
-
-7. **death_create(dataframe, dbfilename)**  
-   Creates a table for COVID-19 death data in the SQLite database.
-
-8. **merged_table(dbfilename, continent)**  
-   Merges various datasets into a single table, allowing for continent-specific queries and analyses.
-
-9. **make_scatterplot(dataframe, continent)**  
-   Generates scatter plots to visualize the relationship between urban population percentages and COVID-19 deaths.
-
-10. **main()**  
-    Orchestrates the entire data flow, from loading datasets to generating visualizations, demonstrating the complete data processing pipeline.
+- **read_data()**: Reads the datasets from the database and returns pandas DataFrame objects.
+- **clean_data(df)**: Cleans the data by handling missing values, removing duplicates, and ensuring consistency within each DataFrame.
+- **merge_datasets(df1, df2, df3)**: Merges the three cleaned DataFrames based on a common attribute (country name).
+- **group_by_continent(df)**: Groups the data by continent for continent-specific analysis.
+- **calculate_urban_percentage(df)**: Calculates the urban population percentage for each country based on the total population and urban population columns.
+- **explore_relationship(df)**: Conducts exploratory data analysis (EDA) to identify trends and correlations between urban population percentage and COVID-19 deaths.
+- **visualize_findings(df)**: Creates visualizations, such as scatter plots, to illustrate the relationship between urban population percentage and COVID-19 deaths across continents.
+- **save_results(df, filename)**: Saves the analyzed and visualized data to a file for further reference or sharing.
 
 ---
 
-## **Implementation Details**
+## **Implementation**
 
-The project is implemented using Python functions that handle specific aspects of data manipulation:
-
-### **1. Data Parsing and Cleaning**  
-- **read_json** loads the OWID COVID-19 data, transforming it into a format that's ready for analysis and database insertion.  
-- **clean_urban_df**, **clean_population_df**, and **clean_death_df** refine their respective datasets, ensuring data integrity and consistency across the merged database.
-
-### **2. Database Creation and Integration**  
-- **urban_create**, **population_create**, and **death_create** set up the SQLite database structure, populating it with cleaned data.  
-- **merged_table** consolidates the different data streams into a unified table, enabling continent-specific analysis.
-
-### **3. Data Visualization**  
-- **make_scatterplot** generates scatter plots that visually represent the relationship between urbanization and COVID-19 mortality rates.
-
-By leveraging this suite of functions, we aim to uncover significant correlations that may inform public health strategies and urban planning, particularly in the context of pandemic preparedness.
+The project utilizes Python with the **pandas** and **matplotlib** libraries for data analysis and visualization. The datasets are cleaned, merged, and analyzed to explore the relationship between urbanization and COVID-19 mortality rates. Visualizations are created to provide insights into the effects of urbanization on the spread of the virus.
 
 ---
 
-## **Results and Analysis**
+## **Conclusion**
 
-The analysis showed the following:
-- **Europe**: Most countries had an urban population percentage between 50% and 85%, with most having fewer than 20,000 new deaths from COVID-19 in 2022. However, a few outliers displayed significantly higher fatality rates, including one country with over 80,000 deaths.
-- **Asia & Oceania**: While urbanization showed some correlation with COVID-19 deaths, countries geographically closer to China (the initial epicenter) displayed higher early death rates, despite varying levels of urbanization.
-
-This analysis underscores that urbanization alone does not fully explain the spread and impact of COVID-19. Factors such as healthcare accessibility, government response, and proximity to initial outbreak locations also played a significant role.
+This project will help us understand how urbanization influences COVID-19 deaths across different continents and whether urban population density plays a significant role in the spread and fatality of the virus. The findings will contribute to public health strategies and urban planning, offering insights into pandemic preparedness.
 
 ---
 
 ## **How to Run the Code**
 
-1. **Clone the repository**:
+1. Clone the repository:
    ```bash
-   git clone https://github.com/viet0901/CS-181-Final-Project.git
+   git clone https://github.com/viet0901/Evaluation-of-Urban-Population-of-Covid-Deaths-Across-Continents.git
    ```
 
-2. **Install required libraries**:
+2. Install the required libraries:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Run the main script**:
+3. Run the main script:
    ```bash
    python main.py
    ```
@@ -120,6 +112,5 @@ Special thanks to Dr. Buell for the initial JSON reading function, which was ada
 
 ## **Note**
 
-- Ensure the SQLite database file (**final.db**) is writable and the necessary permissions are granted to avoid execution errors.
-- If the SQLite database file specified already exists, running the script will result in an error. To avoid this, ensure the file does not already exist or specify a new name in the script.
-```
+- Ensure that the SQLite database file (`final.db`) is writable and the necessary permissions are granted to avoid execution errors.
+- If the SQLite database file already exists, running the script may result in an error. Please ensure the file does not already exist or specify a new name for the database file in the script.
